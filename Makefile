@@ -12,4 +12,4 @@ clean:
 	rm -rf build
 
 build:
-	go build -o build/main ./server/main.go
+	go build -o build/main server/main.go
