@@ -10,8 +10,8 @@ import (
 type Village struct {
 	gorm.Model
 	Name          string
-	Id            int `gorm:"primaryKey"`
-	User          User
+	Id            int         `gorm:"primaryKey"`
+	User          User        `gorm:"foreignKey:ID"`
 	Structures    []Structure `gorm:"-"`
 	StructureByte string
 }
