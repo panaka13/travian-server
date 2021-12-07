@@ -2,36 +2,31 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/panaka13/travian-server/db"
-	"github.com/panaka13/travian-server/model"
+	"github.com/panaka13/travian-server/handler"
 )
 
-func create() {
-	user := model.User{Name: "panaka_13", Id: 3563}
-	fmt.Println(user.Name)
-	village := model.Village{Name: "ka", Id: 1234, User: user}
-	fmt.Println(village.Name)
-	result := db.DB.Create(&user)
-	fmt.Println(result.Error)
-	fmt.Println(result.RowsAffected)
-	db.DB.Create(&village)
-}
+var router *mux.Router
 
-func load() {
-	var user model.User
-	db.DB.First(&user, 3563)
-	fmt.Println(user.ID)
-	fmt.Println(user.Id)
-	var village model.Village
-	db.DB.First(&village, 1234)
-	fmt.Println(village.ID)
-	fmt.Println(village.Id)
+func myInit() {
+	router = mux.NewRouter()
+	router.HandleFunc("/user", handler.CreateUserHandler).Methods("POST")
+	router.HandleFunc("/user/{userid}", handler.GetUserHandler).Methods("GET")
 }
 
 func main() {
+	myInit()
 	db.InitDb()
 	fmt.Println("Hello World")
-	create()
-	load()
+	srv := &http.Server{
+		Handler:      router,
+		Addr:         "127.0.0.1:8000",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+	srv.ListenAndServe()
 }
