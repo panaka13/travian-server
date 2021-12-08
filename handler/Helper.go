@@ -16,6 +16,6 @@ func ObjectResponse(object interface{}, w http.ResponseWriter) {
 	if err != nil {
 		ErrorResponse(err, w)
 	} else {
-		fmt.Fprint(w, json)
+		fmt.Fprint(w, string(json))
 	}
 }
