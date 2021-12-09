@@ -51,15 +51,16 @@ func GetVillageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateVillageStructure(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+
 	var request map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&request)
 	if err := CheckBodyParams(request, "villageid", "part", "structure"); err != nil {
-		w.WriteHeader(http.StatusOK)
 		ErrorResponse(err, w)
 		fmt.Println(err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+
 	var village model.Village
 	result := db.DB.First(&village, request["villageid"].(int))
 	if result.Error != nil {

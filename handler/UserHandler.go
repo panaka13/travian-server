@@ -24,6 +24,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 	vars := mux.Vars(r)
 	id, _ := vars["userid"]
 	var user model.User
