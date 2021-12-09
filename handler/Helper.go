@@ -19,3 +19,12 @@ func ObjectResponse(object interface{}, w http.ResponseWriter) {
 		fmt.Fprint(w, string(json))
 	}
 }
+
+func CheckBodyParams(params map[string]interface{}, keys ...string) error {
+	for _, key := range keys {
+		if _, exist := params[key]; !exist {
+			return fmt.Errorf("Body missing key %s", key)
+		}
+	}
+	return nil
+}

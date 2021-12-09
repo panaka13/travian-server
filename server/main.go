@@ -16,6 +16,9 @@ func myInit() {
 	router = mux.NewRouter()
 	router.HandleFunc("/user", handler.CreateUserHandler).Methods("POST")
 	router.HandleFunc("/user/{userid}", handler.GetUserHandler).Methods("GET")
+	router.HandleFunc("/village", handler.CreateVillageHandler).Methods("POST")
+	router.HandleFunc("/viilage/{villageid}", handler.GetVillageHandler).Methods("GET")
+	router.HandleFunc("/village/structure", handler.UpdateVillageStructure).Methods("PUT")
 }
 
 func main() {

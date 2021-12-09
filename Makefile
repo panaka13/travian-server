@@ -10,6 +10,7 @@ vendor:
 
 clean:
 	rm -rf build
+	rm -rf vendor
 
 build:
 	go build -o build/main server/main.go
