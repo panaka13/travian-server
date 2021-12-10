@@ -31,5 +31,5 @@ func main() {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-	srv.ListenAndServe()
+	srv.ListenAndServeTLS("cert/server.crt", "cert/server.key")
 }
