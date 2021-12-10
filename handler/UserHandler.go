@@ -11,9 +11,22 @@ import (
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
+
+	var request map[string]interface{}
+	json.NewDecoder(r.Body).Decode(&request)
+	if err := CheckBodyParams(request, "id", "name"); err != nil {
+		ErrorResponse(err, w)
+		fmt.Println(err)
+		return
+	}
+
 	var user model.User
-	json.NewDecoder(r.Body).Decode(&user)
+	user.Id = int(request["id"].(float64))
+	user.Name = request["name"].(string)
+
+	fmt.Println(user)
 	result := db.DB.Create(&user)
 	if result.Error != nil {
 		ErrorResponse(result.Error, w)
@@ -24,6 +37,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	vars := mux.Vars(r)
 	id, _ := vars["userid"]

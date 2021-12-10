@@ -6,6 +6,7 @@ import (
 	"github.com/panaka13/travian-server/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var (
@@ -14,7 +15,9 @@ var (
 
 func InitDb() {
 	var err error
-	DB, err = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	DB, err = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		fmt.Println("Cannot connect database")
 		DB = nil
