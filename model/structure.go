@@ -1,9 +1,5 @@
 package model
 
-import (
-	"gorm.io/gorm"
-)
-
 type BuildingType int
 
 const (
@@ -18,7 +14,6 @@ const (
 )
 
 type Structure struct {
-	gorm.Model
 	Building BuildingType
 	Level    int
 }

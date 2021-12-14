@@ -10,6 +10,22 @@ import (
 	"github.com/panaka13/travian-server/model"
 )
 
+func FindUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+
+	name := r.URL.Query().Get("name")
+
+	var user model.User
+	result := db.DB.Where("name = ?", name).First(&user)
+	if result.Error != nil {
+		ErrorResponse(result.Error, w)
+		fmt.Println(result.Error)
+	} else {
+		ObjectResponse(user, w)
+	}
+}
+
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)

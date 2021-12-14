@@ -11,6 +11,7 @@ import (
 )
 
 func CreateVillageHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 
 	var request map[string]interface{}
@@ -33,11 +34,13 @@ func CreateVillageHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(result.Error)
 	} else {
 		ObjectResponse(village, w)
-		fmt.Println(village.Name)
 	}
 }
 
 func GetVillageHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+
 	vars := mux.Vars(r)
 	id, _ := vars["villageid"]
 	var village model.Village
@@ -51,6 +54,12 @@ func GetVillageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateVillageStructure(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		HandlePreflight(w, r)
+		return
+	}
+
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 
 	var request map[string]interface{}
@@ -62,7 +71,7 @@ func UpdateVillageStructure(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var village model.Village
-	result := db.DB.First(&village, request["villageid"].(int))
+	result := db.DB.First(&village, int(request["villageid"].(float64)))
 	if result.Error != nil {
 		ErrorResponse(result.Error, w)
 		fmt.Println(result.Error)

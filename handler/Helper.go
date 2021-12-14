@@ -28,3 +28,10 @@ func CheckBodyParams(params map[string]interface{}, keys ...string) error {
 	}
 	return nil
 }
+
+func HandlePreflight(w http.ResponseWriter, r *http.Request) {
+	method := r.Header.Get("access-control-request-method")
+	w.Header().Add("Access-Control-Allow-Methods", method)
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusNoContent)
+}
