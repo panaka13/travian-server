@@ -30,7 +30,7 @@ func (v *Village) DeserializeStructure() {
 	for len(tokens) < 80 {
 		tokens = append(tokens, "0")
 	}
-	v.Structures = make([]Structure, 40)
+	v.Structures = make([]Structure, 0, 40)
 	for i := 0; i < 40; i++ {
 		level, err := strconv.ParseInt(tokens[i*2+1], 10, 32)
 		if err != nil {
