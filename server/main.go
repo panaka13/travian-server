@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -26,9 +27,14 @@ func main() {
 	myInit()
 	db.InitDb()
 	fmt.Println("Hello World")
+
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8000"
+    }
 	srv := &http.Server{
 		Handler:      router,
-		Addr:         "127.0.0.1:8000",
+        Addr:         ":" + port,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
