@@ -32,11 +32,18 @@ func main() {
     if port == "" {
         port = "8000"
     }
+    
+    cert := os.Getenv("CERT") != ""
+    
 	srv := &http.Server{
 		Handler:      router,
         Addr:         ":" + port,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-	srv.ListenAndServeTLS("cert/server.crt", "cert/server.key")
+  if cert {
+  	srv.ListenAndServeTLS("cert/server.crt", "cert/server.key")
+  } else {
+    srv.ListenAndServe()
+  }
 }
