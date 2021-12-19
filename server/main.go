@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"net/http"
 	"os"
 	"time"
@@ -25,25 +25,38 @@ func myInit() {
 
 func main() {
 	myInit()
-	db.InitDb()
-	fmt.Println("Hello World")
 
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "8000"
-    }
-    
-    cert := os.Getenv("CERT") != ""
-    
+	databaseType := flag.String("databasetype", "sqlite3", "Database type")
+
+	flag.Parse()
+
+	if databaseType == nil {
+		*databaseType = "sqlite3"
+	}
+
+	databaseUrl := os.Getenv("DATABASE_URL")
+	if databaseUrl == "" {
+		databaseUrl = "gorm.db"
+	}
+
+	db.InitDb(*databaseType, databaseUrl)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	cert := os.Getenv("CERT") != ""
+
 	srv := &http.Server{
 		Handler:      router,
-        Addr:         ":" + port,
+		Addr:         ":" + port,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-  if cert {
-  	srv.ListenAndServeTLS("cert/server.crt", "cert/server.key")
-  } else {
-    srv.ListenAndServe()
-  }
+	if cert {
+		srv.ListenAndServeTLS("cert/server.crt", "cert/server.key")
+	} else {
+		srv.ListenAndServe()
+	}
 }
