@@ -3,6 +3,7 @@ package model
 import (
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Village struct {
@@ -12,6 +13,37 @@ type Village struct {
 	Structures    []Structure `gorm:"-"`
 	StructureByte string
 	Production    ResourceSet `gorm:"-"`
+	Resource      ResourceSet `gorm:"-"`
+	ResourceByte  string
+	UpdatedTime   time.Time
+}
+
+func (v *Village) UpdateResource(wood, clay, iron, wheat int) {
+	v.UpdatedTime = time.Now()
+	v.Resource.Wood = wood
+	v.Resource.Clay = clay
+	v.Resource.Iron = iron
+	v.Resource.Wheat = wheat
+	v.SerializeResource()
+}
+
+func (v *Village) Serialize() {
+	v.SerializeResource()
+	v.SerializeStructure()
+}
+
+func (v *Village) Deserialize() {
+	v.DeserializeStructure()
+	v.DeserializeProduction()
+	v.DeserializeResource()
+}
+
+func (v *Village) SerializeResource() {
+	v.ResourceByte = v.Resource.serialize()
+}
+
+func (v *Village) DeserializeResource() {
+	v.Resource.deserialize(v.ResourceByte)
 }
 
 func (v *Village) SerializeStructure() {

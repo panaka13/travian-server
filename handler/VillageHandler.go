@@ -45,7 +45,7 @@ func GetVillageHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := vars["villageid"]
 	var village model.Village
 	result := db.DB.First(&village, id)
-	village.DeserializeStructure()
+	village.Deserialize()
 	if result.Error != nil {
 		ErrorResponse(result.Error, w)
 		fmt.Println(result.Error)
@@ -54,7 +54,7 @@ func GetVillageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func UpdateVillageStructure(w http.ResponseWriter, r *http.Request) {
+func UpdateVillage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "OPTIONS" {
 		HandlePreflight(w, r)
 		return
@@ -78,7 +78,16 @@ func UpdateVillageStructure(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(result.Error)
 		return
 	}
+
+	village.Deserialize()
+	wood := int(request["wood"].(float64))
+	clay := int(request["clay"].(float64))
+	iron := int(request["iron"].(float64))
+	wheat := int(request["wheat"].(float64))
+	village.UpdateResource(wood, clay, iron, wheat)
 	village.PartialDeserialize(request["structure"].(string), request["part"].(string))
+	village.Serialize()
+
 	db.DB.Save(village)
 	ObjectResponse(village, w)
 }

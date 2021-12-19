@@ -20,7 +20,7 @@ func myInit() {
 	router.HandleFunc("/user", handler.FindUserHandler).Methods("GET")
 	router.HandleFunc("/village", handler.CreateVillageHandler).Methods("POST")
 	router.HandleFunc("/village/{villageid}", handler.GetVillageHandler).Methods("GET")
-	router.HandleFunc("/village/structure", handler.UpdateVillageStructure).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/village/structure", handler.UpdateVillage).Methods("PUT", "OPTIONS")
 }
 
 func main() {

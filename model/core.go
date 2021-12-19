@@ -18,5 +18,5 @@ func (r *ResourceSet) deserialize(s string) {
 		r.Wood, r.Clay, r.Iron, r.Wheat = 0, 0, 0, 0
 		return
 	}
-	fmt.Sscanf(s, "%d;%d;%d;%d", r.Wood, r.Clay, r.Iron, r.Wheat)
+	fmt.Sscanf(s, "%d;%d;%d;%d", &r.Wood, &r.Clay, &r.Iron, &r.Wheat)
 }
