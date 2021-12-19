@@ -11,6 +11,7 @@ type Village struct {
 	User          User        `gorm:"foreignKey:Id"`
 	Structures    []Structure `gorm:"-"`
 	StructureByte string
+	Production    ResourceSet `gorm:"-"`
 }
 
 func (v *Village) SerializeStructure() {
@@ -42,6 +43,7 @@ func (v *Village) DeserializeStructure() {
 		}
 		v.Structures = append(v.Structures, Structure{Building: BuildingType(building), Level: int(level)})
 	}
+	v.DeserializeProduction()
 }
 
 func (v *Village) PartialDeserialize(structureByte string, part string) {
@@ -67,5 +69,23 @@ func (v *Village) PartialDeserialize(structureByte string, part string) {
 		v.Structures[i].Level = int(level)
 		v.Structures[i].Building = BuildingType(building)
 	}
+	v.DeserializeProduction()
 	v.SerializeStructure()
+}
+
+func (v *Village) DeserializeProduction() {
+	var r ResourceSet
+	for i := 0; i < 18; i++ {
+		switch v.Structures[i].Building {
+		case WOODCUTTER:
+			r.Wood += v.Structures[i].GetProduction()
+		case CLAY_PIT:
+			r.Clay += v.Structures[i].GetProduction()
+		case IRON_MINE:
+			r.Iron += v.Structures[i].GetProduction()
+		case CROPLAND:
+			r.Wheat += v.Structures[i].GetProduction()
+		}
+	}
+	v.Production = r
 }

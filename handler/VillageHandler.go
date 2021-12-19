@@ -45,6 +45,7 @@ func GetVillageHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := vars["villageid"]
 	var village model.Village
 	result := db.DB.First(&village, id)
+	village.DeserializeStructure()
 	if result.Error != nil {
 		ErrorResponse(result.Error, w)
 		fmt.Println(result.Error)

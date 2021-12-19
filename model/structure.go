@@ -50,3 +50,24 @@ type Structure struct {
 	Building BuildingType
 	Level    int
 }
+
+var WarehouseCapacity [21]int = [21]int{800, 1200, 1700, 2300, 3100, 4000, 5000, 6300, 7800, 9600, 11800, 14400, 17600, 21400, 25900, 31300, 37900, 45700, 55100, 66400, 80000}
+var ResourceProduction [21]int = [21]int{3, 7, 13, 21, 31, 46, 70, 98, 140, 203, 280, 392, 525, 693, 889, 1120, 1400, 1820, 2240, 2800, 3430}
+
+func (s *Structure) GetCapacity() int {
+	switch s.Building {
+	case WAREHOUSE, GRANARY:
+		return WarehouseCapacity[s.Level-1]
+	case GREAT_WAREHOUSE, GREAT_GRANARY:
+		return WarehouseCapacity[s.Level-1] * 3
+	}
+	return 0
+}
+
+func (s *Structure) GetProduction() int {
+	switch s.Building {
+	case WOODCUTTER, CLAY_PIT, IRON_MINE, CROPLAND:
+		return ResourceProduction[s.Level]
+	}
+	return 0
+}
