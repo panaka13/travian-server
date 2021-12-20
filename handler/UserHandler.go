@@ -32,7 +32,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	var request map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&request)
-	if err := CheckBodyParams(request, "id", "name"); err != nil {
+	if err := CheckBodyParams(request, "id", "name", "speed"); err != nil {
 		ErrorResponse(err, w)
 		fmt.Println(err)
 		return
@@ -41,6 +41,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user model.User
 	user.Id = int(request["id"].(float64))
 	user.Name = request["name"].(string)
+	user.Speed = int(request["speed"].(float64))
 
 	fmt.Println(user)
 	result := db.DB.Create(&user)

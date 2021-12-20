@@ -119,5 +119,9 @@ func (v *Village) DeserializeProduction() {
 			r.Wheat += v.Structures[i].GetProduction()
 		}
 	}
+	r.Wood *= v.User.Speed
+	r.Clay *= v.User.Speed
+	r.Iron *= v.User.Speed
+	r.Wheat *= v.User.Speed
 	v.Production = r
 }
