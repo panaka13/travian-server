@@ -29,6 +29,7 @@ func CreateVillageHandler(w http.ResponseWriter, r *http.Request) {
 	db.DB.First(&village.User, int(request["user"].(float64)))
 
 	result := db.DB.Create(&village)
+	db.DB.Save(&village)
 	if result.Error != nil {
 		ErrorResponse(result.Error, w)
 		fmt.Println(result.Error)
@@ -44,7 +45,7 @@ func GetVillageHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := vars["villageid"]
 	var village model.Village
-	result := db.DB.First(&village, id)
+	result := db.DB.Joins("User").First(&village, id)
 	village.Deserialize()
 	if result.Error != nil {
 		ErrorResponse(result.Error, w)

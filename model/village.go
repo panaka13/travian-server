@@ -7,9 +7,10 @@ import (
 )
 
 type Village struct {
-	Name          string      `json:"name"`
-	Id            int         `json:"id",gorm:"primaryKey"`
-	User          User        `gorm:"foreignKey:Id"`
+	Name          string `json:"name"`
+	Id            int    `json:"id",gorm:"primaryKey"`
+	UserId        int
+	User          User        `gorm:"foreignKey:UserId"`
 	Structures    []Structure `gorm:"-"`
 	StructureByte string
 	Production    ResourceSet `gorm:"-"`
